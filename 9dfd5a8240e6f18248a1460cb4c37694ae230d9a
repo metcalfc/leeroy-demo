@@ -1,0 +1,22 @@
+-----BEGIN AI ATTESTATION-----
+Version: 1.0
+Tool: claude-code/2.1.9
+Model: claude-sonnet-4-5-20250929
+Session-ID: 2492d52c96f7f0a0
+Started-At: 2026-01-17T01:28:10Z
+Committed-At: 2026-01-17T01:29:32Z
+
+Files-Modified:
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/src/calculator.py [modified] @ 2026-01-17T01:28:39Z
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/tests/test_calculator.py [modified] @ 2026-01-17T01:28:52Z
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/tests/test_calculator.py [modified] @ 2026-01-17T01:28:59Z
+
+Prompts:
+  [2026-01-17T01:28:10Z] Add a modulo function to the calculator. Add tests for the change.
+  [2026-01-17T01:29:17Z] Commit the change.
+
+Human-Review-Attested: true
+
+Tool-Signature: ed25519:5pv4uv9/S03cqiqLgsP/zEQAhCQBQoTd7HJyvdrvhUTpzMlCexrHj7E+hnDUrwR7qL9bisNsou3Uuek8MjsKAg==
+Tool-Key-Fingerprint: pr4ADRA7wGkt9vW+h2Qv/l/BaHEOkX/w9YjZbdi6NXQ=
+-----END AI ATTESTATION-----
