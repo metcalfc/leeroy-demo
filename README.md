@@ -10,6 +10,8 @@ All commits in this repository include AI attestations that show:
 - What prompts guided the AI
 - Cryptographic signatures proving authenticity
 
+![Leeroy Demo](demo.gif)
+
 ## Viewing Attestations
 
 ```bash
