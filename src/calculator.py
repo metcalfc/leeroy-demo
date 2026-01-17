@@ -23,3 +23,9 @@ def divide(a, b):
 def power(a, b):
     """Raise a to the power of b."""
     return a ** b
+
+def modulo(a, b):
+    """Return the remainder of a divided by b."""
+    if b == 0:
+        raise ValueError("Cannot modulo by zero")
+    return a % b
