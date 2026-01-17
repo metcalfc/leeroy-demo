@@ -1,0 +1,23 @@
+-----BEGIN AI ATTESTATION-----
+Version: 1.0
+Tool: claude-code/2.1.9
+Model: claude-opus-4-5-20251101
+Session-ID: 5671b7b94ad999df
+Started-At: 2026-01-17T01:29:56Z
+Committed-At: 2026-01-17T01:30:46Z
+
+Files-Modified:
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/src/calculator.py [modified] @ 2026-01-17T01:30:07Z
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/src/calculator.py [modified] @ 2026-01-17T01:30:12Z
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/tests/test_calculator.py [modified] @ 2026-01-17T01:30:20Z
+  - /home/metcalfc/src/github.com/metcalfc/leeroy-demo/tests/test_calculator.py [modified] @ 2026-01-17T01:30:26Z
+
+Prompts:
+  [2026-01-17T01:29:56Z] Lets also add sqrt.
+  [2026-01-17T01:30:36Z] Commit the change.
+
+Human-Review-Attested: true
+
+Tool-Signature: ed25519:9lLhcxq1ALaA/lKycZBsljBfyY4qSZfs9X5l5lwqhKu/XEAhoRSZwx5A4oj7xkafddY2B/HJq6xmd1b7tTHkAA==
+Tool-Key-Fingerprint: pr4ADRA7wGkt9vW+h2Qv/l/BaHEOkX/w9YjZbdi6NXQ=
+-----END AI ATTESTATION-----
