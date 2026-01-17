@@ -2,6 +2,8 @@
 Simple calculator module for demonstration purposes.
 """
 
+import math
+
 def add(a, b):
     """Add two numbers."""
     return a + b
@@ -29,3 +31,9 @@ def modulo(a, b):
     if b == 0:
         raise ValueError("Cannot modulo by zero")
     return a % b
+
+def sqrt(a):
+    """Return the square root of a."""
+    if a < 0:
+        raise ValueError("Cannot take square root of negative number")
+    return math.sqrt(a)

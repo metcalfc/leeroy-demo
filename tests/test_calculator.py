@@ -9,7 +9,7 @@ import os
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from calculator import add, subtract, multiply, divide, power, modulo
+from calculator import add, subtract, multiply, divide, power, modulo, sqrt
 
 class TestCalculator(unittest.TestCase):
 
@@ -46,6 +46,14 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(modulo(-10, 3), 2)
         with self.assertRaises(ValueError):
             modulo(5, 0)
+
+    def test_sqrt(self):
+        self.assertEqual(sqrt(4), 2)
+        self.assertEqual(sqrt(9), 3)
+        self.assertEqual(sqrt(0), 0)
+        self.assertAlmostEqual(sqrt(2), 1.41421356, places=5)
+        with self.assertRaises(ValueError):
+            sqrt(-1)
 
 if __name__ == '__main__':
     unittest.main()
