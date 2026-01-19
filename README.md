@@ -38,9 +38,8 @@ leeroy verify HEAD
    - User prompts that guided the AI
 3. On commit, Leeroy:
    - Formats an attestation with all session data
-   - Signs it cryptographically with ed25519
-   - Attaches it as a git note
-4. The attestation travels with the commit and is visible on GitHub
+   - Embeds it in the commit message (today version) or as a git note (tomorrow version)
+4. The attestation travels with the commit and is visible in git history
 
 ## Try It Yourself
 
