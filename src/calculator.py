@@ -37,3 +37,13 @@ def sqrt(a):
     if a < 0:
         raise ValueError("Cannot take square root of negative number")
     return math.sqrt(a)
+
+def log(a, base=None):
+    """Return the logarithm of a. If base is None, return natural log."""
+    if a <= 0:
+        raise ValueError("Cannot take logarithm of non-positive number")
+    if base is None:
+        return math.log(a)
+    if base <= 0 or base == 1:
+        raise ValueError("Logarithm base must be positive and not equal to 1")
+    return math.log(a, base)

@@ -2,6 +2,7 @@
 Unit tests for calculator module.
 """
 
+import math
 import unittest
 import sys
 import os
@@ -9,7 +10,7 @@ import os
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from calculator import add, subtract, multiply, divide, power, modulo, sqrt
+from calculator import add, subtract, multiply, divide, power, modulo, sqrt, log
 
 class TestCalculator(unittest.TestCase):
 
@@ -54,6 +55,20 @@ class TestCalculator(unittest.TestCase):
         self.assertAlmostEqual(sqrt(2), 1.41421356, places=5)
         with self.assertRaises(ValueError):
             sqrt(-1)
+
+    def test_log(self):
+        self.assertAlmostEqual(log(math.e), 1, places=5)
+        self.assertAlmostEqual(log(1), 0, places=5)
+        self.assertAlmostEqual(log(100, 10), 2, places=5)
+        self.assertAlmostEqual(log(8, 2), 3, places=5)
+        with self.assertRaises(ValueError):
+            log(0)
+        with self.assertRaises(ValueError):
+            log(-1)
+        with self.assertRaises(ValueError):
+            log(10, 1)
+        with self.assertRaises(ValueError):
+            log(10, -2)
 
 if __name__ == '__main__':
     unittest.main()
