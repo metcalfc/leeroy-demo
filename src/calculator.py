@@ -47,3 +47,7 @@ def log(a, base=None):
     if base <= 0 or base == 1:
         raise ValueError("Logarithm base must be positive and not equal to 1")
     return math.log(a, base)
+
+def cube(a):
+      """Return the cube of a."""
+      return a ** 3
