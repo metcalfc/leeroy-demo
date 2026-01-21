@@ -51,3 +51,7 @@ def log(a, base=None):
 def sin(a):
     """Return the sine of a (in radians)."""
     return math.sin(a)
+
+def cos(a):
+    """Return the cosine of a (in radians)."""
+    return math.cos(a)
