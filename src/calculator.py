@@ -55,3 +55,7 @@ def sin(a):
 def cos(a):
     """Return the cosine of a (in radians)."""
     return math.cos(a)
+
+def tan(a):
+    """Return the tangent of a (in radians)."""
+    return math.tan(a)

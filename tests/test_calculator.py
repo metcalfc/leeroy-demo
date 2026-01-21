@@ -10,7 +10,7 @@ import os
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from calculator import add, subtract, multiply, divide, power, modulo, sqrt, log, sin, cos
+from calculator import add, subtract, multiply, divide, power, modulo, sqrt, log, sin, cos, tan
 
 class TestCalculator(unittest.TestCase):
 
@@ -81,6 +81,12 @@ class TestCalculator(unittest.TestCase):
         self.assertAlmostEqual(cos(math.pi / 2), 0, places=5)
         self.assertAlmostEqual(cos(math.pi), -1, places=5)
         self.assertAlmostEqual(cos(math.pi / 3), 0.5, places=5)
+
+    def test_tan(self):
+        self.assertAlmostEqual(tan(0), 0, places=5)
+        self.assertAlmostEqual(tan(math.pi / 4), 1, places=5)
+        self.assertAlmostEqual(tan(math.pi), 0, places=5)
+        self.assertAlmostEqual(tan(-math.pi / 4), -1, places=5)
 
 if __name__ == '__main__':
     unittest.main()
