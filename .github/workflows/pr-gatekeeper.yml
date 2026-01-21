@@ -1,7 +1,13 @@
 name: PR Gatekeeper
 
+# We use pull_request_target instead of pull_request because:
+# 1. PRs from forks get read-only GITHUB_TOKEN with pull_request (security feature)
+# 2. This workflow needs write access to add labels and post comments
+# 3. This is SAFE because we only read git commit metadata - we don't checkout or
+#    execute any code from the PR. The attestation check uses git rev-list on
+#    commit messages only.
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -126,17 +132,15 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const baseSha = '${{ github.event.pull_request.base.sha }}';
-            const headSha = '${{ github.event.pull_request.head.sha }}';
-
-            console.log(`Checking commit signatures from ${baseSha.slice(0,8)} to ${headSha.slice(0,8)}`);
-
-            // Get commits in the PR using the GitHub API
+            // Use GitHub API for signature verification - works for GPG, SSH, and S/MIME
+            // Local git verification fails for SSH signatures without gpg.ssh.allowedSignersFile
             const { data: commits } = await github.rest.pulls.listCommits({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
+
+            console.log(`Checking signatures for ${commits.length} commits`);
 
             let total = 0;
             let signed = 0;
