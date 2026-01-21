@@ -231,16 +231,71 @@ jobs:
             const attestationLabel = '${{ steps.evaluate.outputs.attestation_label }}';
             const allSigned = '${{ steps.check-signatures.outputs.all_signed }}' === 'true';
 
-            // All possible labels this action manages
-            const managedLabels = [
-              'trusted-contributor',
-              'ai-assisted',
-              'human-attested',
-              'attested-mixed',
-              'attested-partial',
-              'no-attestation',
-              'signed-commits'
-            ];
+            // Label definitions with colors and descriptions
+            const labelDefs = {
+              'trusted-contributor': {
+                color: '238636',  // green
+                description: 'PR author has write access to this repository'
+              },
+              'ai-assisted': {
+                color: 'a371f7',  // purple
+                description: 'All commits have AI attestation via Leeroy'
+              },
+              'human-attested': {
+                color: '1f6feb',  // blue
+                description: 'All commits attested as human-authored'
+              },
+              'attested-mixed': {
+                color: '3fb950',  // teal
+                description: 'Mix of AI-assisted and human-attested commits'
+              },
+              'attested-partial': {
+                color: 'd29922',  // yellow/orange
+                description: 'Some commits have attestation'
+              },
+              'no-attestation': {
+                color: 'da3633',  // red
+                description: 'No commits have Leeroy attestation'
+              },
+              'signed-commits': {
+                color: '238636',  // green
+                description: 'All commits are cryptographically signed'
+              }
+            };
+
+            const managedLabels = Object.keys(labelDefs);
+
+            // Ensure labels exist with correct colors
+            async function ensureLabel(name) {
+              const def = labelDefs[name];
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: name
+                });
+                // Label exists, update color if needed
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: name,
+                  color: def.color,
+                  description: def.description
+                });
+              } catch (e) {
+                if (e.status === 404) {
+                  // Label doesn't exist, create it
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: name,
+                    color: def.color,
+                    description: def.description
+                  });
+                  console.log(`Created label: ${name}`);
+                }
+              }
+            }
 
             // Remove any existing managed labels first
             const existingLabels = await github.rest.issues.listLabelsOnIssue({
@@ -280,8 +335,11 @@ jobs:
               labelsToAdd.push('signed-commits');
             }
 
-            // Add labels if we have any
+            // Ensure labels exist with proper colors, then add them
             if (labelsToAdd.length > 0) {
+              for (const label of labelsToAdd) {
+                await ensureLabel(label);
+              }
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
