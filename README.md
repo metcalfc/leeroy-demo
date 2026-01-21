@@ -10,7 +10,12 @@ All commits in this repository include AI attestations that show:
 - What prompts guided the AI
 - Cryptographic signatures proving authenticity
 
-![Leeroy Demo](demo.gif)
+An Approach for Today with Commits:
+![Leeroy Demo](demo-commits.gif)
+
+An Approach for Tomorrow with VCS Metadata (implemented with Notes):
+![Leeroy Demo](demo-notes.gif)
+
 
 ## Viewing Attestations
 
