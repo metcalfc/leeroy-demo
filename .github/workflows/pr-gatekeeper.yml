@@ -123,61 +123,48 @@ jobs:
 
       - name: Check commit signatures
         id: check-signatures
-        run: |
-          BASE_SHA=${{ github.event.pull_request.base.sha }}
-          HEAD_SHA=${{ github.event.pull_request.head.sha }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const baseSha = '${{ github.event.pull_request.base.sha }}';
+            const headSha = '${{ github.event.pull_request.head.sha }}';
 
-          echo "Checking commit signatures from ${BASE_SHA:0:8} to ${HEAD_SHA:0:8}"
+            console.log(`Checking commit signatures from ${baseSha.slice(0,8)} to ${headSha.slice(0,8)}`);
 
-          total=0
-          signed=0
-          signature_details=""
+            // Get commits in the PR using the GitHub API
+            const { data: commits } = await github.rest.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
 
-          for sha in $(git rev-list ${BASE_SHA}..${HEAD_SHA}); do
-            ((total++)) || true
-            short_sha="${sha:0:8}"
-            subject=$(git log -1 --format="%s" ${sha})
+            let total = 0;
+            let signed = 0;
+            let signatureDetails = [];
 
-            # Check if commit is signed (GPG or SSH)
-            # %G? gives: G=good, B=bad, U=untrusted, X=expired, Y=expired key, R=revoked, E=missing key, N=none
-            sig_status=$(git log -1 --format="%G?" ${sha})
-            signer=$(git log -1 --format="%GS" ${sha})
+            for (const commit of commits) {
+              total++;
+              const shortSha = commit.sha.slice(0, 8);
+              const subject = commit.commit.message.split('\n')[0];
+              const verification = commit.commit.verification;
 
-            if [[ "${sig_status}" == "G" ]]; then
-              ((signed++)) || true
-              signature_details="${signature_details}${short_sha} [✅ ${signer}] ${subject}\n"
-              echo "✅ ${short_sha}: Signed by ${signer}"
-            elif [[ "${sig_status}" == "U" ]]; then
-              # Untrusted but valid signature - still count it
-              ((signed++)) || true
-              signature_details="${signature_details}${short_sha} [⚠️ ${signer} (untrusted)] ${subject}\n"
-              echo "⚠️ ${short_sha}: Signed by ${signer} (untrusted key)"
-            else
-              signature_details="${signature_details}${short_sha} [❌ unsigned] ${subject}\n"
-              echo "❌ ${short_sha}: Not signed"
-            fi
-          done
+              if (verification && verification.verified) {
+                signed++;
+                const reason = verification.reason || 'verified';
+                signatureDetails.push(`${shortSha} [✅ ${reason}] ${subject}`);
+                console.log(`✅ ${shortSha}: Verified (${reason})`);
+              } else {
+                const reason = verification ? verification.reason : 'unsigned';
+                signatureDetails.push(`${shortSha} [❌ ${reason}] ${subject}`);
+                console.log(`❌ ${shortSha}: Not verified (${reason})`);
+              }
+            }
 
-          echo "signed=${signed}" >> $GITHUB_OUTPUT
-          echo "total=${total}" >> $GITHUB_OUTPUT
-
-          # All commits signed?
-          if [[ ${total} -gt 0 && ${signed} -eq ${total} ]]; then
-            echo "all_signed=true" >> $GITHUB_OUTPUT
-          else
-            echo "all_signed=false" >> $GITHUB_OUTPUT
-          fi
-
-          # Any commits signed?
-          if [[ ${signed} -gt 0 ]]; then
-            echo "has_signatures=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_signatures=false" >> $GITHUB_OUTPUT
-          fi
-
-          echo "signature_details<<EOF" >> $GITHUB_OUTPUT
-          echo -e "${signature_details}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+            core.setOutput('signed', signed);
+            core.setOutput('total', total);
+            core.setOutput('all_signed', total > 0 && signed === total);
+            core.setOutput('has_signatures', signed > 0);
+            core.setOutput('signature_details', signatureDetails.join('\n'));
 
       - name: Evaluate PR status
         id: evaluate
