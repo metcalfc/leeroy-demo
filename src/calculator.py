@@ -47,3 +47,15 @@ def log(a, base=None):
     if base <= 0 or base == 1:
         raise ValueError("Logarithm base must be positive and not equal to 1")
     return math.log(a, base)
+
+def sin(a):
+    """Return the sine of a (in radians)."""
+    return math.sin(a)
+
+def cos(a):
+    """Return the cosine of a (in radians)."""
+    return math.cos(a)
+
+def tan(a):
+    """Return the tangent of a (in radians)."""
+    return math.tan(a)
